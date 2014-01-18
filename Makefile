@@ -7,8 +7,8 @@ OUTPUT_DIR = bin
 OUTPUT_RELEASE = $(OUTPUT_DIR)/krakjam14
 OUTPUT_DEBUG = $(OUTPUT_DIR)/krakjam14
 
-INCLUDE_DIRS = -Isrc -Iinclude -Iextlibs/Box2D_v2.2.1/include
-LIBRARY_DIRS = -Lextlibs/Box2D_v2.2.1/lib
+INCLUDE_DIRS = -Isrc -Iinclude -Iextlibs/Box2D_v2.3.0/include
+LIBRARY_DIRS = -Lextlibs/Box2D_v2.3.0/lib
 
 CXX = clang++
 CFLAGS = -std=c++11 -Wall -Wextra $(INCLUDE_DIRS) -DPLATFORM_LINUX
@@ -106,4 +106,7 @@ clean:
 	rm -rf $(INTERMEDIATE_DIR)
 	rm -rf $(OUTPUT_DIR)
 	rm -f $(TESTS_OUTPUTS)
+
+install-ubuntu-packages:
+	sudo apt-get install libsfml-dev libgl1-mesa-dev libglu1-mesa-dev libglew-dev libxi-dev
 

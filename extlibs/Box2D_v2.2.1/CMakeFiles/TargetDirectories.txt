@@ -1,0 +1,5 @@
+/home/dex/Desktop/ld27/extlibs/Box2D_v2.2.1/Box2D/CMakeFiles/Box2D.dir
+/home/dex/Desktop/ld27/extlibs/Box2D_v2.2.1/HelloWorld/CMakeFiles/HelloWorld.dir
+/home/dex/Desktop/ld27/extlibs/Box2D_v2.2.1/Testbed/CMakeFiles/Testbed.dir
+/home/dex/Desktop/ld27/extlibs/Box2D_v2.2.1/freeglut/CMakeFiles/freeglut_static.dir
+/home/dex/Desktop/ld27/extlibs/Box2D_v2.2.1/glui/CMakeFiles/glui.dir
