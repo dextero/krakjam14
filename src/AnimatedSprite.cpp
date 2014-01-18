@@ -34,7 +34,7 @@ void AnimatedSprite::load(const std::string& filename, int numFrames, float fps)
         ss.str("");
         ss << filenameBase << i << filenameExtension;
 
-        sf::Image* img = &gImgMgr.Get(ss.str());
+        sf::Image* img = &gImgMgr.get(ss.str());
         mImages.push_back(img);
     }
 

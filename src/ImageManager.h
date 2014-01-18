@@ -2,4 +2,4 @@
 
 #include <SFML/Graphics/Image.hpp>
 
-#define gImgMgr ResourceManager<sf::Image>::Get()
+#define gImgMgr ResourceManager<sf::Image>::get()

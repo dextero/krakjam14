@@ -11,3 +11,14 @@
 *.lai
 *.la
 *.a
+
+# swap files
+*.swp
+
+# binary file folders
+bin/
+obj/
+
+# external libraries
+extlibs/
+

@@ -10,9 +10,9 @@
 Game::Game():
     mUpdateStep(1.f / 30.f)
 {
-    mSplashScreen.SetImage(gImgMgr.Get("data/splash.png"));
-    mIntroScreen.SetImage(gImgMgr.Get("data/intro.png"));
-    mGameOverScreen.SetImage(gImgMgr.Get("data/gameover.png"));
+    mSplashScreen.SetImage(gImgMgr.get("data/splash.png"));
+    mIntroScreen.SetImage(gImgMgr.get("data/intro.png"));
+    mGameOverScreen.SetImage(gImgMgr.get("data/gameover.png"));
 
 //    mBackgroundMusic.Stop();
 //    mBackgroundMusic.OpenFromFile("data/settlers4-mayan.ogg");
@@ -26,7 +26,7 @@ Game::~Game()
 
 }
 
-void Game::Init()
+void Game::init()
 {
     Log.log(Logger::MESSAGE, "initializing...\n");
 
@@ -41,14 +41,9 @@ void Game::Init()
     Log.log(Logger::MESSAGE, "game initialized\n");
 }
 
-void Game::HandleInput()
+void Game::handleInput()
 {
     sf::Event ev;
-
-    mLevel.GetPlayer().Jump(mWindow.GetInput().IsKeyDown(sf::Key::W));
-    mLevel.GetPlayer().Move(
-        mWindow.GetInput().IsKeyDown(sf::Key::A) ? MoveLeft :
-            mWindow.GetInput().IsKeyDown(sf::Key::D) ? MoveRight : MoveStop);
 
     while (mWindow.GetEvent(ev))
     {
@@ -62,7 +57,7 @@ void Game::HandleInput()
         case INTRO:
             if (ev.Type == sf::Event::KeyPressed ||
                 ev.Type == sf::Event::MouseButtonPressed)
-                Init();
+                init();
             break;
         case RUNNING:
             switch (ev.Type)
@@ -77,7 +72,7 @@ void Game::HandleInput()
                 switch (ev.Key.Code)
                 {
                 case sf::Key::F1:
-                    mLevel.Load("");
+                    mLevel.load("");
                     break;
                 case sf::Key::Space:
                     break;
@@ -97,7 +92,7 @@ void Game::HandleInput()
             break;
         case OVER:
             if (ev.Type == sf::Event::KeyPressed)
-                Init();
+                init();
             break;
         }
 
@@ -123,7 +118,7 @@ void Game::HandleInput()
     }
 }
 
-void Game::Update( float dt )
+void Game::update( float dt )
 {
     switch (mState)
     {
@@ -134,14 +129,14 @@ void Game::Update( float dt )
         mState = RUNNING;
         break;
     case RUNNING:
-        mLevel.Update(dt);
+        mLevel.update(dt);
         break;
     case OVER:
         break;
     }
 }
 
-void Game::Draw()
+void Game::draw()
 {
     mWindow.Clear(sf::Color::Black);
 
@@ -154,7 +149,7 @@ void Game::Draw()
         mWindow.Draw(mIntroScreen);
         break;
     case RUNNING:
-        mLevel.Draw(mWindow);
+        mLevel.draw(mWindow);
         break;
     case OVER:
         mWindow.Draw(mGameOverScreen);
@@ -164,11 +159,9 @@ void Game::Draw()
     mWindow.Display();
 }
 
-void Game::Run()
+void Game::run()
 {
     Log.log(Logger::MESSAGE, "game started\n");
-
-    static const sf::Vector2i WINDOW_SIZE(1024, 768);
 
     mWindow.Create(
         sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y),
@@ -176,8 +169,7 @@ void Game::Run()
         sf::Style::Close);
 
     mWindow.SetView(sf::View(sf::FloatRect(
-        0.f, (float)WINDOW_SIZE.y,
-        (float)WINDOW_SIZE.x, 0.f)));
+        0.f, WORLD_SIZE.y, WORLD_SIZE.x, 0.f)));
 
     mWindow.ShowMouseCursor(false);
 
@@ -188,18 +180,18 @@ void Game::Run()
 
     while (mWindow.IsOpened())
     {
-        HandleInput();
+        handleInput();
 
         timeAccumulator += clock.GetElapsedTime();
         clock.Reset();
 
-        while (timeAccumulator > mUpdateStep) 
+        while (timeAccumulator > mUpdateStep)
         {
-            Update(mUpdateStep);
+            update(mUpdateStep);
             timeAccumulator -= mUpdateStep;
         }
 
-        Draw();
+        draw();
     }
 
     Log.log(Logger::MESSAGE, "game closed\n");

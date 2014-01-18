@@ -11,7 +11,7 @@ public:
     {
     }
 
-    T& Get(const std::string& name)
+    T& get(const std::string& name)
     {
         auto it = resources.find(name);
         if (it == resources.end())
@@ -25,7 +25,7 @@ public:
         return resources[name];
     }
 
-    static ResourceManager& Get()
+    static ResourceManager& get()
     {
         if (singleton == NULL)
             singleton = new ResourceManager();

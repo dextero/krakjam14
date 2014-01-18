@@ -143,7 +143,7 @@ public:
     inline Logger& operator <<(std::ostream& (*manipulator)(std::ostream&))
     {
         assert(mLogStream && mLogStream->good() && "Invalid log stream");
-        
+
         (*mLogStream) << manipulator;
 
         return *this;

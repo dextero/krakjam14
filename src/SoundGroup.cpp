@@ -8,7 +8,7 @@ SoundGroup::SoundGroup( size_t maxSounds )
     mSoundBuffers.resize(maxSounds);
 }
 
-void SoundGroup::AddSound( const std::string& sound, float volume )
+void SoundGroup::addSound( const std::string& sound, float volume )
 {
     for (size_t i = 0; i < mSounds.size(); ++i)
     {

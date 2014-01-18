@@ -14,23 +14,32 @@ public:
     Level();
     ~Level();
 
-    bool Load(const std::string& filename);
+    bool load(const std::string& filename);
 
-    void Update(float dt);
-    void Draw(sf::RenderWindow& window);
+    void update(float dt);
+    void draw(sf::RenderWindow& window);
 
-    inline Player& GetPlayer();
+    inline bool isTimeOut() const;
+
+    inline Player& getPlayer();
 
 private:
-    void DebugDrawBodies(sf::RenderWindow& window);
+    void debugDrawBodies(sf::RenderWindow& window);
 
-    void AddPlatform(const b2AABB& platform);
+    void addPlatform(const b2AABB& platform);
 
     std::unique_ptr<b2World> mWorld;
     Player mPlayer;
+
+    float mTotalTime;
 };
 
-inline Player& Level::GetPlayer()
+inline Player& Level::getPlayer()
 {
     return mPlayer;
+}
+
+inline bool Level::isTimeOut() const
+{
+    return mTotalTime >= 10.f;
 }

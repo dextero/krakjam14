@@ -10,19 +10,22 @@
 #include "MessageSystem.h"
 #include "Level.h"
 
+static const sf::Vector2i WINDOW_SIZE(1024, 768);
+static const sf::Vector2f WORLD_SIZE(WINDOW_SIZE.x / 3.f, WINDOW_SIZE.y / 3.f);
+
 class Game
 {
 public:
     Game();
     ~Game();
 
-    void Init();
+    void init();
 
-    void HandleInput();
-    void Update(float dt);
-    void Draw();
+    void handleInput();
+    void update(float dt);
+    void draw();
 
-    void Run();
+    void run();
 
 private:
     sf::RenderWindow mWindow;

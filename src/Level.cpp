@@ -3,25 +3,27 @@
 #include "utils/Utils.h"
 #include "utils/Logger.h"
 
+#include "Game.h"
+
 #include <SFML/Graphics/Shape.hpp>
 
 Level::Level()
 {
-    Load("");
+    load("");
 }
 
 Level::~Level()
 {
 }
 
-bool Level::Load(const std::string& filename)
+bool Level::load(const std::string& filename)
 {
     (void)filename;
 
-    static const b2Vec2 WINDOW_SIZE(1024.f, 768.f);
+    static const b2Vec2 WINDOW_SIZE(WORLD_SIZE.x, WORLD_SIZE.y);
     static const float PLAYER_SIZE = 20.f;
     static const float MARGIN = 10.f;
-    static const b2Vec2 INITIAL_PLAYER_POS(5.f * MARGIN, 2.f * MARGIN);
+    static const b2Vec2 INITIAL_PLAYER_POS(3.f * MARGIN, 2.f * MARGIN);
     static const b2Vec2 GRAVITY(0.f, -100.f);
 
     mWorld.reset(new b2World(GRAVITY));
@@ -30,36 +32,60 @@ bool Level::Load(const std::string& filename)
         { b2Vec2(MARGIN, MARGIN), b2Vec2(WINDOW_SIZE.x - MARGIN, 2.f * MARGIN) },
         { b2Vec2(MARGIN, MARGIN), b2Vec2(2.f * MARGIN, WINDOW_SIZE.y - MARGIN) },
         { b2Vec2(WINDOW_SIZE.x - 2.f * MARGIN, MARGIN), b2Vec2(WINDOW_SIZE.x - MARGIN, WINDOW_SIZE.y - MARGIN) },
-        { b2Vec2(MARGIN, WINDOW_SIZE.y - 2.f * MARGIN), b2Vec2(WINDOW_SIZE.x - MARGIN, WINDOW_SIZE.y - MARGIN) }
+        { b2Vec2(MARGIN, WINDOW_SIZE.y - 2.f * MARGIN), b2Vec2(WINDOW_SIZE.x - MARGIN, WINDOW_SIZE.y - MARGIN) },
+
+        { b2Vec2(37.f, MARGIN * 2.f), b2Vec2(37.f + MARGIN, 200.f) },
     };
 
     for (size_t i = 0; i < ARRAY_SIZE(platforms); ++i)
     {
-        AddPlatform(platforms[i]);
+        addPlatform(platforms[i]);
         Log << "adding " << platforms[i].lowerBound.x << ", "
                          << platforms[i].lowerBound.y << " -> "
                          << platforms[i].upperBound.x << ", "
                          << platforms[i].upperBound.y << "\n";
     }
 
-    mPlayer.Create(mWorld.get(), PLAYER_SIZE, INITIAL_PLAYER_POS);
+    mPlayer.create(mWorld.get(), PLAYER_SIZE, INITIAL_PLAYER_POS);
 
     return true;
 }
 
 
-void Level::Update(float dt)
+void Level::update(float dt)
 {
-    mPlayer.Update(dt);
+    mPlayer.update(dt);
     mWorld->Step(dt, 5, 5);
+
+    mTotalTime += dt;
+
+    if (isTimeOut())
+    {
+        static unsigned counter = 0;
+
+        if (++counter == 10)
+        {
+            counter = 0;
+
+            int bodyToErase = rand() % mWorld->GetBodyCount();
+            b2Body* body = mWorld->GetBodyList();
+
+            for (; --bodyToErase && body; body = body->GetNext()) {}
+
+            if (body && body->GetType() == b2_staticBody)
+            {
+                body->SetType(b2_dynamicBody);
+            }
+        }
+    }
 }
 
-void Level::Draw(sf::RenderWindow& window)
+void Level::draw(sf::RenderWindow& window)
 {
-    DebugDrawBodies(window);
+    debugDrawBodies(window);
 }
 
-void Level::DebugDrawBodies(sf::RenderWindow& window)
+void Level::debugDrawBodies(sf::RenderWindow& window)
 {
     static const sf::Color BODY_COLOR(255, 0, 0, 128);
 
@@ -111,10 +137,10 @@ void Level::DebugDrawBodies(sf::RenderWindow& window)
     }
 }
 
-void Level::AddPlatform(const b2AABB& platform)
+void Level::addPlatform(const b2AABB& platform)
 {
     b2BodyDef platformBodyDef;
-    platformBodyDef.position = platform.GetCenter(); 
+    platformBodyDef.position = platform.GetCenter();
     b2Body* platformBody = mWorld->CreateBody(&platformBodyDef);
     platformBody->SetType(b2_staticBody);
 

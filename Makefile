@@ -1,17 +1,30 @@
-#############
-# DIRECTORIES
-#############
-
 SOURCE_DIR = src
 TESTS_DIR = tests
+
+# WARNING: mustn't be . or 'make clean' will do horrible things
+OUTPUT_DIR = bin
+
+OUTPUT_RELEASE = $(OUTPUT_DIR)/krakjam14
+OUTPUT_DEBUG = $(OUTPUT_DIR)/krakjam14
+
+INCLUDE_DIRS = -Isrc -Iinclude -Iextlibs/Box2D_v2.2.1/include
+LIBRARY_DIRS = -Lextlibs/Box2D_v2.2.1/lib
+
+CXX = clang++
+CFLAGS = -std=c++11 -Wall -Wextra $(INCLUDE_DIRS) -DPLATFORM_LINUX
+CFLAGS_DEBUG = -g -D_DEBUG
+CFLAGS_RELEASE = -O2
+
+LD = clang++
+LDFLAGS = $(LIBRARY_DIRS)
+LDADD = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-audio -lBox2D
+LDADD_DEBUG =
+LDADD_RELEASE =
 
 # WARNING: mustn't be . or 'make clean' will do horrible things
 INTERMEDIATE_DIR = obj
 INTERMEDIATE_DIR_DEBUG = $(INTERMEDIATE_DIR)/debug
 INTERMEDIATE_DIR_RELEASE = $(INTERMEDIATE_DIR)/release
-
-# WARNING: mustn't be . or 'make clean' will do horrible things
-OUTPUT_DIR = bin
 
 ESCAPED_SOURCE_DIR = $(shell echo $(SOURCE_DIR) | sed 's/\//\\\//g')
 ESCAPED_INTERMEDIATE_DIR_DEBUG := $(shell echo $(INTERMEDIATE_DIR_DEBUG) | sed 's/\//\\\//g')
@@ -33,34 +46,6 @@ OBJECTS_DIRS = $(OBJECTS_DIRS_DEBUG) $(OBJECTS_DIRS_RELEASE)
 
 TESTS_ADDITIONAL_OBJECTS = $(shell echo $(OBJECTS_DEBUG) | awk '{ split($$0, a, " "); for (i=1; i<=NF; i++) print a[i] }' | grep -v 'main.o')
 TESTS_OUTPUTS = $(shell find $(TESTS_DIR) -name '*.cpp' | sed 's/\.cpp//g')
-
-#########
-# OUTPUTS
-#########
-
-OUTPUT_RELEASE = $(OUTPUT_DIR)/ld27
-OUTPUT_DEBUG = $(OUTPUT_DIR)/ld27_debug
-
-
-##################
-# COMPILER OPTIONS
-##################
-
-INCLUDE_DIRS = -Isrc -Iinclude -Iextlibs/Box2D_v2.2.1/include
-LIBRARY_DIRS = -Lextlibs/Box2D_v2.2.1/lib
-
-CXX = clang++
-CFLAGS = -std=c++11 -Wall -Wextra $(INCLUDE_DIRS) -DPLATFORM_LINUX
-CFLAGS_DEBUG = -g -D_DEBUG
-CFLAGS_RELEASE = -O2
-
-
-LD = clang++
-LDFLAGS = $(LIBRARY_DIRS)
-LDADD = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-audio -lBox2D
-LDADD_DEBUG =
-LDADD_RELEASE =
-
 
 #######
 # RULES
@@ -121,3 +106,4 @@ clean:
 	rm -rf $(INTERMEDIATE_DIR)
 	rm -rf $(OUTPUT_DIR)
 	rm -f $(TESTS_OUTPUTS)
+

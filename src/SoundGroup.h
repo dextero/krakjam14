@@ -8,7 +8,7 @@ class SoundGroup
 {
 public:
     SoundGroup(size_t maxSounds);
-    void AddSound(const std::string& sound, float volume = 100.f);
+    void addSound(const std::string& sound, float volume = 100.f);
 
 private:
     std::vector<sf::SoundBuffer> mSoundBuffers;

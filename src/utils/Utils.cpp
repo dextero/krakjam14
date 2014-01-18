@@ -2,12 +2,12 @@
 
 #include <cstdlib>
 
-float Utils::Random(float min, float max)
+float Utils::random(float min, float max)
 {
     return (float)(min + (max - min) * ((double)rand() / (double)RAND_MAX));
 }
 
-float Utils::RandomVariation(float center, float variation)
+float Utils::randomVariation(float center, float variation)
 {
-    return Random(center - variation, center + variation);
+    return random(center - variation, center + variation);
 }

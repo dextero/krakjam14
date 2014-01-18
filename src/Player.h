@@ -21,21 +21,26 @@ public:
 
     ~Player();
 
-    void Create(b2World* world, float size, const b2Vec2& pos);
-    void Clear();
+    void create(b2World* world, float size, const b2Vec2& pos);
+    void clear();
 
-    void Update(float dt);
-    void Render();
+    void update(float dt);
+    void render();
 
-    inline void Move(MoveDirection direction);
-    inline void Jump(bool jump);
+    inline void move(MoveDirection direction);
+    inline void jump(bool jump);
 
 private:
     MoveDirection mMoveDirection;
     bool mCanJump;
+    bool mCanWallJump;
     bool mDoJump;
+    bool mDoWallJump;
+    MoveDirection mJumpDir;
 
     b2Body* mBody;
+    b2Fixture* mLeftEar;
+    b2Fixture* mRightEar;
     b2Fixture* mFootFixture;
     static const float MOVE_FORCE;
     static const float JUMP_FORCE;
@@ -45,13 +50,19 @@ private:
     friend class PlayerContactListener;
 };
 
-inline void Player::Move(MoveDirection direction)
+inline void Player::move(MoveDirection direction)
 {
     mMoveDirection = direction;
 }
 
-inline void Player::Jump(bool jump)
+inline void Player::jump(bool jump)
 {
-    //Log << "jump: " << jump << "\n";
     mDoJump = jump && mCanJump;
+    //Log << "mDoJump = " << mDoJump << "\n";
+
+    if (!mDoJump)
+    {
+        mDoWallJump = jump && mCanWallJump;
+        //Log << "mDoWallJump = " << mDoWallJump << "\n";
+    }
 }

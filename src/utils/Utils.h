@@ -8,22 +8,22 @@
 
 namespace Utils
 {
-    float Random(float min, float max);
-    float RandomVariation(float center, float variation);
+    float random(float min, float max);
+    float randomVariation(float center, float variation);
 
-    template<typename T> T Clamp(T val, T min, T max)
+    template<typename T> T clamp(T val, T min, T max)
     {
         return (val < min) ? min : ((val > max) ? max : val);
     }
 
-    template<typename T> const std::string ToString(T val)
+    template<typename T> const std::string toString(T val)
     {
         std::ostringstream ss;
         ss << val;
         return ss.str();
     }
 
-    template<typename T> T Parse(const std::string& str)
+    template<typename T> T parse(const std::string& str)
     {
         std::istringstream ss;
         T ret;
